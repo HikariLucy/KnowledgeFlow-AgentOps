@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.pytest_temp/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Vector stores / generated data
+vectorstore/
+.faiss/
+*.faiss
+*.pkl
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Evaluation results (exploratory runs are ignored; .gitkeep is preserved)
+evaluation/results/*
+!evaluation/results/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
