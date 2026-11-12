@@ -1,0 +1,14 @@
+PREGUNTAS FRECUENTES INTERNAS — NOVATECH SPA
+[Aviso Academico: Documento simulado para fines pedagogicos en KnowledgeFlow RAG - Asignatura ISY0101]
+
+P: ¿Como solicito acceso a un repositorio de codigo o base de datos interna?
+R: Debes crear un requerimiento en la Mesa de Ayuda de TI seleccionando la categoria "Solicitud de Accesos", adjuntando la aprobacion formal de tu jefatura directa y especificando el rol requerido segun el principio de menor privilegio.
+
+P: ¿Cual es el horario de atencion de la Mesa de Ayuda tecnica?
+R: El horario habitual es de lunes a viernes de 08:30 a 18:30 horas. Para incidentes criticos (Severidad 1) fuera de horario, se activa el turno de guardia de soporte llamando al anexo de emergencias tecnicas.
+
+P: ¿Que debo hacer si olvido mi factor de doble autenticacion (MFA)?
+R: Debes contactar directamente a la Mesa de Ayuda para validar tu identidad por videollamada y solicitar el reinicio seguro de tu token MFA.
+
+P: ¿Donde se deben almacenar las copias de seguridad de proyectos?
+R: Todo respaldo debe almacenarse en los repositorios institucionales en la nube cifrados en reposo, nunca en discos duros locales o unidades portatiles personales.

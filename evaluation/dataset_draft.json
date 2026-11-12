@@ -1,0 +1,319 @@
+{
+  "version": "1.0",
+  "description": "Borrador de dataset de evaluación controlada para KnowledgeFlow RAG sobre el corpus de NovaTech SpA (ISY0101). Requiere revisión humana previa a uso oficial.",
+  "cases": [
+    {
+      "id": "EVAL-001",
+      "query": "¿Cómo debo reportar un incidente de seguridad y a qué canales?",
+      "category": "internal",
+      "expected_scope": "internal",
+      "answerable": true,
+      "expected_source_types": [
+        "internal"
+      ],
+      "expected_files": [
+        "procedimiento_incidentes.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Procedimiento de notificación por correo a alerta-seguridad o ticket de severidad alta.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-002",
+      "query": "¿Cuál es el tiempo de respuesta inicial para un incidente de Severidad 1 (Crítica)?",
+      "category": "internal",
+      "expected_scope": "internal",
+      "answerable": true,
+      "expected_source_types": [
+        "internal"
+      ],
+      "expected_files": [
+        "procedimiento_incidentes.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Clasificación de incidentes: Severidad 1 exige respuesta en menos de 15 minutos.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-003",
+      "query": "¿Qué requisitos de longitud y complejidad deben cumplir las contraseñas internas de NovaTech?",
+      "category": "internal",
+      "expected_scope": "internal",
+      "answerable": true,
+      "expected_source_types": [
+        "internal"
+      ],
+      "expected_files": [
+        "politica_accesos.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Política de accesos: mínimo 14 caracteres combinando mayúsculas, minúsculas, números y símbolos.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-004",
+      "query": "¿Qué procedimiento debo seguir si olvido mi factor de doble autenticación (MFA)?",
+      "category": "internal",
+      "expected_scope": "internal",
+      "answerable": true,
+      "expected_source_types": [
+        "internal"
+      ],
+      "expected_files": [
+        "faq_interna.txt"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "FAQ interna: contactar a Mesa de Ayuda para validar identidad por videollamada y reiniciar token.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-005",
+      "query": "¿Cuál es el horario habitual de atención de la Mesa de Ayuda técnica de TI?",
+      "category": "internal",
+      "expected_scope": "internal",
+      "answerable": true,
+      "expected_source_types": [
+        "internal"
+      ],
+      "expected_files": [
+        "faq_interna.txt"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "FAQ interna: lunes a viernes de 08:30 a 18:30 horas.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-006",
+      "query": "¿Qué protocolos y algoritmos se recomiendan para el cifrado de datos en tránsito y en reposo?",
+      "category": "external",
+      "expected_scope": "external",
+      "answerable": true,
+      "expected_source_types": [
+        "external"
+      ],
+      "expected_files": [
+        "referencia_seguridad.txt"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Estándar externo: TLS 1.3 en tránsito y AES-256 en reposo.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-007",
+      "query": "¿Qué medidas de seguridad se deben aplicar para sanitizar entradas y prevenir Prompt Injection en sistemas LLM?",
+      "category": "external",
+      "expected_scope": "external",
+      "answerable": true,
+      "expected_source_types": [
+        "external"
+      ],
+      "expected_files": [
+        "referencia_seguridad.txt",
+        "owasp_llm_prompt_injection_prevention.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Referencia de seguridad: validar y sanitizar prompts de entrada, separación de planos de control y datos (OWASP LLM Prompt Injection Prevention Cheat Sheet).",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-008",
+      "query": "¿Cuáles son las buenas prácticas para el manejo seguro de secretos, claves de API y configuración?",
+      "category": "external",
+      "expected_scope": "external",
+      "answerable": true,
+      "expected_source_types": [
+        "external"
+      ],
+      "expected_files": [
+        "guia_buenas_practicas.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Guía externa: no almacenar secretos en código fuente, usar variables de entorno y .env.example.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-009",
+      "query": "¿Qué estrategia y pirámide de testing se recomienda para pruebas de software automatizadas?",
+      "category": "external",
+      "expected_scope": "external",
+      "answerable": true,
+      "expected_source_types": [
+        "external"
+      ],
+      "expected_files": [
+        "guia_buenas_practicas.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Guía externa: priorizar pruebas unitarias rápidas y deterministas sobre servicios externos.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-010",
+      "query": "¿En qué consiste el principio de minimización de datos según los estándares de seguridad?",
+      "category": "external",
+      "expected_scope": "external",
+      "answerable": true,
+      "expected_source_types": [
+        "external"
+      ],
+      "expected_files": [
+        "referencia_seguridad.txt",
+        "nist_privacy_framework_data_minimization.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Referencia de seguridad: principio de minimización de datos para recolección, políticas de acceso para eliminación (CT.DM-P4) y destrucción conforme a políticas (CT.DM-P5).",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-011",
+      "query": "Compara las directrices internas de contraseñas de NovaTech con las buenas prácticas de manejo de secretos y configuración",
+      "category": "all",
+      "expected_scope": "all",
+      "answerable": true,
+      "expected_source_types": [
+        "internal",
+        "external"
+      ],
+      "expected_files": [
+        "politica_accesos.md",
+        "guia_buenas_practicas.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Consulta comparativa entre requisitos internos de contraseña y manejo seguro de secretos externo.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-012",
+      "query": "¿Dónde se deben almacenar los respaldos internos de NovaTech y cómo se alinean con los estándares de cifrado en reposo?",
+      "category": "all",
+      "expected_scope": "all",
+      "answerable": true,
+      "expected_source_types": [
+        "internal",
+        "external"
+      ],
+      "expected_files": [
+        "faq_interna.txt",
+        "referencia_seguridad.txt"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Consulta mixta: almacenamiento institucional en la nube (FAQ interna) y cifrado AES-256 (referencia externa).",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-013",
+      "query": "Compara las acciones internas de contención ante un incidente de seguridad con el estándar de auditoría y registros inmutables",
+      "category": "all",
+      "expected_scope": "all",
+      "answerable": true,
+      "expected_source_types": [
+        "internal",
+        "external"
+      ],
+      "expected_files": [
+        "procedimiento_incidentes.md",
+        "referencia_seguridad.txt"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Consulta mixta: aislamiento y volcado de RAM (procedimiento interno) y log inmutable de auditoría (referencia externa).",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-014",
+      "query": "¿Cómo se complementa el principio interno de menor privilegio con el registro de operaciones de autenticación y autorización recomendado por la documentación externa?",
+      "category": "all",
+      "expected_scope": "all",
+      "answerable": true,
+      "expected_source_types": [
+        "internal",
+        "external"
+      ],
+      "expected_files": [
+        "politica_accesos.md",
+        "referencia_seguridad.txt"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Consulta comparativa sobre menor privilegio interno (politica_accesos.md) y auditoría externa (referencia_seguridad.txt).",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-015",
+      "query": "Compara la elaboración del informe post-mortem interno tras un incidente con las buenas prácticas de documentación y trazabilidad",
+      "category": "all",
+      "expected_scope": "all",
+      "answerable": true,
+      "expected_source_types": [
+        "internal",
+        "external"
+      ],
+      "expected_files": [
+        "procedimiento_incidentes.md",
+        "guia_buenas_practicas.md",
+        "nist_sp_800_218_ssdf.md"
+      ],
+      "expected_behavior": "grounded_answer",
+      "notes": "Consulta mixta: post-mortem a los 3 días hábiles (interno) y análisis de causa raíz y lecciones aprendidas según NIST SSDF RV.3 (externo).",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-016",
+      "query": "¿Cuál es la velocidad exacta de la luz en el vacío en kilómetros por segundo?",
+      "category": "out_of_domain",
+      "expected_scope": null,
+      "answerable": false,
+      "expected_source_types": [],
+      "expected_files": [],
+      "expected_behavior": "abstain",
+      "notes": "Consulta de física general completamente fuera del dominio documental corporativo.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-017",
+      "query": "¿Cuáles son los ingredientes tradicionales y los pasos para cocinar una tortilla de patatas española?",
+      "category": "out_of_domain",
+      "expected_scope": null,
+      "answerable": false,
+      "expected_source_types": [],
+      "expected_files": [],
+      "expected_behavior": "abstain",
+      "notes": "Consulta gastronómica fuera de dominio.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-018",
+      "query": "¿Cuáles son las ciudades capitales de todos los países de Sudamérica?",
+      "category": "out_of_domain",
+      "expected_scope": null,
+      "answerable": false,
+      "expected_source_types": [],
+      "expected_files": [],
+      "expected_behavior": "abstain",
+      "notes": "Consulta de geografía general fuera de dominio.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-019",
+      "query": "¿Cuáles fueron las causas y consecuencias principales de la Revolución Industrial en el siglo XIX?",
+      "category": "out_of_domain",
+      "expected_scope": null,
+      "answerable": false,
+      "expected_source_types": [],
+      "expected_files": [],
+      "expected_behavior": "abstain",
+      "notes": "Consulta histórica fuera de dominio.",
+      "human_reviewed": true
+    },
+    {
+      "id": "EVAL-020",
+      "query": "¿A cuántos pesos chilenos equivale un euro hoy en el mercado financiero?",
+      "category": "out_of_domain",
+      "expected_scope": null,
+      "answerable": false,
+      "expected_source_types": [],
+      "expected_files": [],
+      "expected_behavior": "abstain",
+      "notes": "Consulta financiera en tiempo real fuera de dominio.",
+      "human_reviewed": true
+    }
+  ]
+}

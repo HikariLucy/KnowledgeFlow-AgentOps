@@ -1,0 +1,14 @@
+ESTÁNDARES DE SEGURIDAD Y PRIVACIDAD DE DATOS
+[Aviso Academico: Documento simulado para fines pedagogicos en KnowledgeFlow RAG - Asignatura ISY0101]
+
+1. Cifrado en Transito y en Reposo:
+Todas las comunicaciones externas deben realizarse sobre protocolos seguros (TLS 1.3). La informacion persistida en bases de datos y almacenamiento de objetos debe estar cifrada utilizando algoritmos robustos como AES-256.
+
+2. Principio de Minimización de Datos:
+Solo se deben recolectar y almacenar los datos estrictamente necesarios para los fines operativos del sistema, implementando politicas de expiracion y purga automatica para datos temporales.
+
+3. Sanitización de Entradas y Salidas en Sistemas LLM:
+Las aplicaciones basadas en modelos de lenguaje deben validar y sanitizar los prompts de entrada para prevenir inyecciones indirectas (Prompt Injection) y filtrar informacion sensible (PII) antes de transmitir consultas a proveedores externos.
+
+4. Auditoría y Registro de Eventos:
+Se debe registrar un log detallado de todas las operaciones de autenticacion, autorizacion y modificaciones criticas del sistema, asegurando la inmutabilidad de los registros para fines forenses.
