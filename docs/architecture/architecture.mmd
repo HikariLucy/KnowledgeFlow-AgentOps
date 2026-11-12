@@ -1,0 +1,59 @@
+flowchart TD
+    subgraph Client["Capa de Presentación"]
+        UI["KnowledgeFlow Web UI<br/>(Editorial Workbench)"]
+    end
+
+    subgraph API["Capa de Servicio (FastAPI)"]
+        Endpoint["POST /api/query<br/>(QueryRequest)"]
+    end
+
+    subgraph Routing["Capa de Enrutamiento Inteligente"]
+        Router["Source Router Agent<br/>(gemini-3.5-flash-lite)"]
+        Decision{"Ámbito Documental<br/>(internal / external / all)"}
+    end
+
+    subgraph Retrieval["Capa de Recuperación y Vectorstore"]
+        Embedder["Gemini Embeddings<br/>(gemini-embedding-2 / 768d)"]
+        FAISS["Índice FAISS + Manifest<br/>(Fingerprint determinista SHA-256)"]
+        CorpusInt["Corpus Interno (INT)<br/>NovaTech SpA (Simulado)"]
+        CorpusExt["Corpus Externo (EXT)<br/>OWASP & NIST Curados"]
+    end
+
+    subgraph Filtering["Compuerta de Evidencia y Abstención"]
+        Ranker["Filtrado Top-K = 4<br/>(Balanceado para ALL)"]
+        Threshold{"Similitud Coseno<br/>≥ 0.60?"}
+        Abstain["Abstención Temprana<br/>(abstained=True / Citas=[])"]
+    end
+
+    subgraph Generation["Capa de Síntesis Fundamentada"]
+        ContextBuilder["Aislamiento de Contexto<br/>(Planos de Control y Datos)"]
+        Generator["Grounded RAG Generator<br/>(gemini-3.5-flash)"]
+        CitationCheck["Validador de Citas [S#]<br/>(Validación de Referencias [S#])"]
+    end
+
+    subgraph Output["Entrega y Trazabilidad"]
+        Contract["QueryResponse<br/>(RAGAnswer)"]
+        Ledger["Evidence Ledger<br/>+ Badges [INT] / [EXT]"]
+    end
+
+    %% Flujos
+    UI -->|"Consulta + Scope"| Endpoint
+    Endpoint -->|"QueryRequest"| Router
+    Router --> Decision
+    Decision -->|"internal / external / all"| Embedder
+    CorpusInt -.->|"Ingesta / Indexación"| FAISS
+    CorpusExt -.->|"Ingesta / Indexación"| FAISS
+    Embedder -->|"Vector Query"| FAISS
+    FAISS -->|"Candidatos recuperados"| Ranker
+    Ranker --> Threshold
+
+    Threshold -->|"No (Score < 0.60)"| Abstain
+    Threshold -->|"Sí (Score ≥ 0.60)"| ContextBuilder
+
+    Abstain -->|"Respuesta segura"| Contract
+    ContextBuilder -->|"Contexto estructurado"| Generator
+    Generator -->|"Texto generado + [S#]"| CitationCheck
+    CitationCheck -->|"Respuesta validada"| Contract
+
+    Contract --> UI
+    Contract --> Ledger

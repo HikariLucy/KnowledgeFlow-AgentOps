@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KnowledgeFlow Agent — demostración EP2 con planificación, herramientas, memoria y trazabilidad.">
+  <title>KnowledgeFlow Agent — Workspace EP2</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/agent.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="agent-page">
+  <header class="app-header">
+    <div class="header-inner container">
+      <div class="brand-group">
+        <div class="brand-glyph" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 3h8v8H3zM17 3h8v8h-8zM3 17h8v8H3z"></path>
+            <path d="M11 7h6M7 11v6M11 21h4a6 6 0 0 0 6-6v-4"></path>
+            <path d="M17 17h8v8h-8z" fill="currentColor" stroke="none"></path>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-name">KnowledgeFlow Agent</span>
+          <span class="brand-sub">EP2 · planificación, tools, memoria y operación trazable</span>
+        </div>
+      </div>
+      <div class="header-tags">
+        <a class="agent-nav-link" href="/">RAG EP1</a>
+        <span class="tag-divider">/</span>
+        <span class="tag-pill tag-pill-primary"><span class="system-signal" aria-hidden="true"></span>AGENT WORKSPACE</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content container agent-main">
+    <section class="agent-hero">
+      <div>
+        <span class="agent-kicker">KNOWLEDGEFLOW / EP2</span>
+        <h1>Consola de ejecución agentic</h1>
+        <p>Ejecuta una solicitud, inspecciona el plan, las herramientas utilizadas, la memoria recuperada y las acciones operacionales.</p>
+      </div>
+      <div class="conversation-card">
+        <span class="conversation-label">CONVERSATION_ID</span>
+        <code id="conversation-id"></code>
+        <button id="new-conversation-btn" type="button" class="workbench-btn-secondary">Nueva conversación</button>
+      </div>
+    </section>
+
+    <section class="station-card agent-command-card">
+      <div class="station-header">
+        <div class="station-idx-group">
+          <span class="station-tag">COMMAND / 01</span>
+          <h2 class="station-title">Solicitud al agente</h2>
+        </div>
+        <span class="station-meta-hint">POST /api/agent</span>
+      </div>
+
+      <form id="agent-form" class="agent-form" novalidate>
+        <div class="agent-grid agent-grid-two">
+          <label class="agent-field">
+            <span>Tipo de ejecución</span>
+            <select id="action-type">
+              <option value="knowledge">Consulta de conocimiento</option>
+              <option value="create_incident">Consultar + crear incidente</option>
+              <option value="incident_note">Seguimiento del incidente en memoria</option>
+            </select>
+          </label>
+
+          <label class="agent-field">
+            <span>Alcance documental</span>
+            <select id="source-scope">
+              <option value="internal">Interno</option>
+              <option value="">Auto</option>
+              <option value="external">Externo</option>
+              <option value="all">Interno + externo</option>
+            </select>
+          </label>
+        </div>
+
+        <label class="agent-field">
+          <span>Mensaje</span>
+          <textarea id="agent-message" rows="4" required placeholder="Ej. Perdí mi autenticador MFA. Revisa el procedimiento y registra un incidente."></textarea>
+        </label>
+
+        <div id="incident-create-fields" class="agent-action-panel hidden">
+          <div class="agent-panel-heading">
+            <span>WRITE TOOL / create_incident</span>
+            <small>Payload validado antes de escribir en SQLite</small>
+          </div>
+          <div class="agent-grid agent-grid-two">
+            <label class="agent-field">
+              <span>Título</span>
+              <input id="incident-title" type="text" value="Pérdida de autenticador MFA">
+            </label>
+            <label class="agent-field">
+              <span>Categoría</span>
+              <select id="incident-category">
+                <option value="access">access</option>
+                <option value="security">security</option>
+                <option value="hardware">hardware</option>
+                <option value="software">software</option>
+                <option value="other">other</option>
+              </select>
+            </label>
+            <label class="agent-field agent-field-wide">
+              <span>Descripción</span>
+              <input id="incident-description" type="text" value="Usuario perdió el dispositivo utilizado para MFA.">
+            </label>
+            <label class="agent-field">
+              <span>Severidad</span>
+              <select id="incident-severity">
+                <option value="low">low</option>
+                <option value="medium" selected>medium</option>
+                <option value="high">high</option>
+                <option value="critical">critical</option>
+              </select>
+            </label>
+          </div>
+        </div>
+
+        <div id="incident-note-fields" class="agent-action-panel hidden">
+          <div class="agent-panel-heading">
+            <span>WRITE TOOL / append_incident_note</span>
+            <small>El incident_id puede resolverse desde la memoria de la conversación</small>
+          </div>
+          <label class="agent-field">
+            <span>Nota de seguimiento</span>
+            <input id="incident-note" type="text" value="Identidad del usuario validada.">
+          </label>
+        </div>
+
+        <div class="agent-actions">
+          <button type="submit" id="agent-submit-btn" class="workbench-btn-primary">
+            <span class="btn-index" aria-hidden="true">01</span>
+            <span>Ejecutar agente</span>
+          </button>
+          <button type="button" id="load-demo-btn" class="workbench-btn-secondary">Cargar creación MFA</button>
+        </div>
+      </form>
+    </section>
+
+    <div id="agent-loading" class="loading-state hidden" aria-live="polite">
+      <div class="loading-banner">
+        <div class="process-indicator"><div class="spinner-track"><div class="spinner-bar"></div></div></div>
+        <div class="loading-content">
+          <p class="loading-eyebrow">AGENT RUNTIME / EN CURSO</p>
+          <p class="loading-title">Planificando y ejecutando herramientas</p>
+          <div class="process-steps" aria-hidden="true">
+            <span class="p-step">PLAN</span><span class="p-arrow">→</span>
+            <span class="p-step">TOOLS</span><span class="p-arrow">→</span>
+            <span class="p-step">MEMORY</span><span class="p-arrow">→</span>
+            <span class="p-step">RESULT</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="agent-error" class="error-state hidden" role="alert">
+      <div class="error-banner">
+        <div class="error-body">
+          <h2 id="agent-error-title" class="error-title">Error</h2>
+          <p id="agent-error-message" class="error-message"></p>
+        </div>
+      </div>
+    </div>
+
+    <section id="agent-results" class="agent-results hidden" aria-live="polite">
+      <div class="agent-summary-grid">
+        <article class="agent-summary-card">
+          <span>STATUS</span>
+          <strong id="result-status">—</strong>
+        </article>
+        <article class="agent-summary-card">
+          <span>INTENT</span>
+          <strong id="result-intent">—</strong>
+        </article>
+        <article class="agent-summary-card">
+          <span>INCIDENT</span>
+          <strong id="result-incident">—</strong>
+        </article>
+        <article class="agent-summary-card">
+          <span>ITERATIONS</span>
+          <strong id="result-iterations">—</strong>
+        </article>
+      </div>
+
+      <div class="agent-result-layout">
+        <article class="station-card agent-output-card">
+          <div class="station-header">
+            <div class="station-idx-group">
+              <span class="station-tag">RESULT / 02</span>
+              <h2 class="station-title">Respuesta del agente</h2>
+            </div>
+          </div>
+          <div class="agent-output-body">
+            <p id="agent-output"></p>
+            <div id="result-next-actions" class="agent-next-actions hidden">
+              <div>
+                <span class="agent-next-kicker">SIGUIENTE TURNO</span>
+                <p id="followup-hint">Continúa sobre el incidente recién creado sin cambiar de conversación.</p>
+              </div>
+              <button id="prepare-followup-btn" type="button" class="workbench-btn-secondary">
+                Continuar con seguimiento
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <article class="station-card agent-trace-card">
+          <div class="station-header">
+            <div class="station-idx-group">
+              <span class="station-tag">TRACE / 03</span>
+              <h2 class="station-title">Plan y herramientas</h2>
+            </div>
+          </div>
+          <div class="agent-trace-body">
+            <div>
+              <h3>Plan</h3>
+              <ol id="plan-list" class="agent-list"></ol>
+            </div>
+            <div>
+              <h3>Tool calls</h3>
+              <div id="tool-list" class="agent-chip-list"></div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="agent-result-layout">
+        <article class="station-card">
+          <div class="station-header">
+            <div class="station-idx-group">
+              <span class="station-tag">MEMORY / 04</span>
+              <h2 class="station-title">Contexto recuperado</h2>
+            </div>
+            <span id="memory-count" class="count-badge">0</span>
+          </div>
+          <div id="memory-list" class="agent-ledger"></div>
+        </article>
+
+        <article class="station-card">
+          <div class="station-header">
+            <div class="station-idx-group">
+              <span class="station-tag">EVIDENCE / 05</span>
+              <h2 class="station-title">Fuentes recuperadas</h2>
+            </div>
+            <span id="source-count" class="count-badge">0</span>
+          </div>
+          <div id="source-list" class="agent-ledger"></div>
+        </article>
+      </div>
+
+      <article class="station-card">
+        <div class="station-header">
+          <div class="station-idx-group">
+            <span class="station-tag">OBSERVATIONS / 06</span>
+            <h2 class="station-title">Observaciones operacionales</h2>
+          </div>
+        </div>
+        <div id="observation-list" class="agent-observation-grid"></div>
+        <details class="technical-details">
+          <summary class="technical-summary">
+            <span><span class="technical-prefix">INSPECT /</span> JSON completo</span>
+          </summary>
+          <div class="technical-body">
+            <pre class="tech-raw-json"><code id="agent-raw-json"></code></pre>
+          </div>
+        </details>
+      </article>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand"><span class="footer-mark">&bull;</span><span>KnowledgeFlow Agent · EP2</span></div>
+      <span class="footer-meta">ISY0101 · Ingeniería de Soluciones con IA</span>
+    </div>
+  </footer>
+
+  <script src="/static/agent.js"></script>
+</body>
+</html>
