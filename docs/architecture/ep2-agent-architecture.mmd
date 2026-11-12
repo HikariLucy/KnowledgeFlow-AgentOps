@@ -1,0 +1,42 @@
+flowchart TD
+    U["Usuario"] --> UI["UI Agentic<br/>GET /agent"]
+    UI --> API["FastAPI<br/>POST /api/agent"]
+
+    API --> AR["AgentRequest<br/>Pydantic"]
+    AR --> SVC["AgentService"]
+    SVC --> ORCH["AdaptiveOrchestrator"]
+    ORCH --> PLAN["RuleBasedPlanner"]
+    PLAN --> STATE["AgentState"]
+
+    PLAN --> STM["ShortTermMemory"]
+    PLAN --> SEM["SemanticMemory"]
+    SEM --> LTM["LongTermMemoryStore"]
+
+    ORCH --> KTOOL["search_knowledge<br/>KnowledgeRAGTool"]
+    ORCH --> CTOOL["create_incident"]
+    ORCH --> STOOL["search_incidents"]
+    ORCH --> NTOOL["append_incident_note"]
+
+    KTOOL --> RAG["RAGPipeline EP1"]
+    RAG --> ROUTER["GeminiSourceRouter"]
+    RAG --> RET["Retriever"]
+    RET --> FAISS["FAISS<br/>47 chunks / 768d"]
+    RAG --> GEN["Grounded Generator"]
+    GEN --> KRES["KnowledgeQueryResult<br/>answer + citations + sources"]
+
+    CTOOL --> REPO["IncidentRepository"]
+    STOOL --> REPO
+    NTOOL --> REPO
+    REPO --> DB[("SQLite<br/>incidents + incident_notes")]
+
+    LTM --> DB
+
+    KRES --> STATE
+    REPO --> STATE
+
+    ORCH --> WB["MemoryWriteBack"]
+    WB --> STM
+    WB --> SEM
+
+    ORCH --> RESP["AgentResponse<br/>status + intent + plan + tools<br/>memory + sources + observations"]
+    RESP --> UI
