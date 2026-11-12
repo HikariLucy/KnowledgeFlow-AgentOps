@@ -1,0 +1,23 @@
+# Core Web Framework
+fastapi>=0.110.0
+uvicorn[standard]>=0.29.0
+pydantic>=2.7.0
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# Document Processing & RAG Foundations
+langchain-core>=0.2.0
+langchain-text-splitters>=0.2.0
+pypdf>=4.2.0
+faiss-cpu>=1.14.0
+numpy>=1.25.0
+
+# LLM Provider (Google Gemini decoupled client)
+google-genai~=1.65.0
+
+# Agent Framework
+crewai[google-genai]==1.15.22
+
+# Testing & Quality
+pytest>=8.0.0
+httpx>=0.27.0

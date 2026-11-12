@@ -1,0 +1,105 @@
+{
+  "_comment": "UI DEVELOPMENT FIXTURES — Curated exclusively for offline UI preview and visual state validation using actual corpus filenames. Preview similarity values are illustrative UI fixtures and are NOT measured retrieval results. NOT official benchmark results, NOT live evaluation data.",
+  "scenarios": {
+    "internal": {
+      "query": "¿Qué requisitos deben cumplir las contraseñas internas?",
+      "source_scope": "internal",
+      "answer": "De acuerdo con la política interna de control de accesos de NovaTech [S1], las contraseñas deben tener una longitud mínima de 14 caracteres, combinando letras mayúsculas, minúsculas, números y símbolos especiales. Asimismo, la autenticación multifactor (MFA) es obligatoria para acceder a cualquier servicio interno, correo corporativo o VPN, y queda estrictamente prohibido compartir credenciales o almacenarlas en texto plano.",
+      "citations": ["S1"],
+      "sources": [
+        {
+          "id": "S1",
+          "file_name": "politica_accesos.md",
+          "source_type": "internal",
+          "chunk_index": 0,
+          "score": 0.842
+        }
+      ],
+      "abstained": false
+    },
+    "external": {
+      "query": "¿Cómo se previene Prompt Injection según OWASP?",
+      "source_scope": "external",
+      "answer": "Según la guía técnica de OWASP para prevención de Prompt Injection [S1], se debe tratar todo contexto recuperado y entrada externa como datos no confiables y no como instrucciones ejecutables. Se recomienda implementar delimitadores estructurales claros para aislar las fuentes del System Prompt, sanitizar las entradas, restringir las funciones del modelo al menor privilegio y validar las salidas generadas.",
+      "citations": ["S1"],
+      "sources": [
+        {
+          "id": "S1",
+          "file_name": "owasp_llm_prompt_injection_prevention.md",
+          "source_type": "external",
+          "chunk_index": 1,
+          "score": 0.819
+        }
+      ],
+      "abstained": false
+    },
+    "mixed": {
+      "query": "Compara el procedimiento interno de incidentes con buenas prácticas externas.",
+      "source_scope": "all",
+      "answer": "El procedimiento interno de NovaTech [S1] exige la notificación inmediata de anomalías, clasificación por severidad, aislamiento preventivo y la elaboración de un informe post-mortem dentro de los 3 días hábiles para identificar causas raíz y acciones correctivas. De forma complementaria, el marco NIST SP 800-218 SSDF [S2] prescribe analizar formalmente las causas raíz de las vulnerabilidades y documentar lecciones aprendidas para actualizar el ciclo de desarrollo de software (SDLC) y reducir su recurrencia.",
+      "citations": ["S1", "S2"],
+      "sources": [
+        {
+          "id": "S1",
+          "file_name": "procedimiento_incidentes.md",
+          "source_type": "internal",
+          "chunk_index": 1,
+          "score": 0.835
+        },
+        {
+          "id": "S2",
+          "file_name": "nist_sp_800_218_ssdf.md",
+          "source_type": "external",
+          "chunk_index": 3,
+          "score": 0.792
+        }
+      ],
+      "abstained": false
+    },
+    "abstention": {
+      "query": "¿Cuál es la velocidad de la luz en el vacío?",
+      "source_scope": "all",
+      "answer": "No encontré evidencia documental suficiente en el corpus institucional ni en los estándares técnicos vinculados para responder a esta consulta con el nivel de respaldo requerido.",
+      "citations": [],
+      "sources": [],
+      "abstained": true
+    },
+    "density": {
+      "query": "Auditoría integral de accesos, incidentes, inyección de prompts y desarrollo seguro",
+      "source_scope": "all",
+      "answer": "La política interna de accesos [S1] exige autenticación MFA y contraseñas de al menos 14 caracteres bajo el principio de menor privilegio. Ante incidentes de seguridad, el procedimiento operativo [S2] instruye aislar equipos afectados y elaborar informes post-mortem. Para aplicaciones con modelos de lenguaje, OWASP [S3] requiere separar estructuralmente las instrucciones de los datos no confiables, mientras que el marco NIST SSDF [S4] estipula proteger repositorios y código fuente frente a manipulaciones no autorizadas.",
+      "citations": ["S1", "S2", "S3", "S4"],
+      "sources": [
+        {
+          "id": "S1",
+          "file_name": "politica_accesos.md",
+          "source_type": "internal",
+          "chunk_index": 0,
+          "score": 0.865
+        },
+        {
+          "id": "S2",
+          "file_name": "procedimiento_incidentes.md",
+          "source_type": "internal",
+          "chunk_index": 1,
+          "score": 0.824
+        },
+        {
+          "id": "S3",
+          "file_name": "owasp_llm_prompt_injection_prevention.md",
+          "source_type": "external",
+          "chunk_index": 1,
+          "score": 0.781
+        },
+        {
+          "id": "S4",
+          "file_name": "nist_sp_800_218_ssdf.md",
+          "source_type": "external",
+          "chunk_index": 0,
+          "score": 0.753
+        }
+      ],
+      "abstained": false
+    }
+  }
+}
