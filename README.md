@@ -13,9 +13,15 @@ Agregar **observabilidad, trazabilidad y evaluación reproducible** a la base de
 
 **Dashboard:** interfaz propia con **FastAPI + HTML/CSS/JavaScript**, integrada con la UI actual del agente; **sin Streamlit**. Su implementación es un hito pendiente; no se presentan métricas simuladas como resultados reales.
 
+## Estado de migración
+
+**Completada:** 141 archivos de EP2 importados y verificados por SHA, incluidos código, tests, UI, documentación y datasets. El README histórico se conserva en [docs/legacy/README_EP2.md](docs/legacy/README_EP2.md). Consultar [acta técnica de migración](docs/legacy/MIGRACION-EP2.md).
+
+**Pendiente:** ejecutar `pytest -q` en el nuevo entorno, implementar observabilidad, benchmark EP3 y dashboard web propio.
+
 ## Base migrada desde EP2
 
-El código original de EP2, las herramientas, memoria, pruebas, conocimientos de demostración, scripts y documentación histórica se importan desde el repositorio `HikariLucy/KnowledgeFlow-Agent` (rama `main`, snapshot en el commit de migración). El README anterior se conserva en [docs/legacy/README_EP2.md](docs/legacy/README_EP2.md). Esta copia **no traslada por sí sola el historial Git** del repositorio anterior; conserva su procedencia.
+El código original de EP2, las herramientas, memoria, pruebas, conocimientos de demostración, scripts y documentación histórica se importan desde el repositorio `HikariLucy/KnowledgeFlow-Agent` (rama `main`, snapshot del commit fuente `53efc993f1edac638f364aac7e6d34982f023bb6`). El README anterior se conserva en [docs/legacy/README_EP2.md](docs/legacy/README_EP2.md). Esta copia **no traslada por sí sola el historial Git** del repositorio anterior; conserva su procedencia.
 
 ## Ejecutar la base heredada
 
@@ -33,7 +39,7 @@ Windows: activar `.venv\Scripts\Activate.ps1`. Las dependencias y pruebas se ver
 
 | Hito | Entregable | Estado |
 |---|---|---|
-| 0 | Migrar EP2 y documentar línea base | En preparación |
+| 0 | Migrar EP2 y documentar línea base | **Completado (141/141 archivos verificados)** |
 | 1 | Auditoría técnica y pruebas offline | Pendiente |
 | 2 | Logging JSON, trace/span IDs y medición de latencia | Pendiente |
 | 3 | Benchmark y métricas (calidad, consistencia, errores, recursos) | Pendiente |
