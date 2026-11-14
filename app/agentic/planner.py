@@ -6,6 +6,7 @@ from enum import Enum
 
 from pydantic import BaseModel, Field
 
+from app.observability.telemetry import instrument
 from app.agentic.state import AgentState
 from app.memory.semantic import SemanticMemory
 from app.memory.short_term import ShortTermMemory
@@ -75,6 +76,7 @@ class RuleBasedPlanner:
             if not unicodedata.combining(character)
         )
 
+    @instrument('planner', 'hydrate_memory')
     def hydrate_memory_context(self, state: AgentState) -> None:
         """Load relevant short- and long-term memories into AgentState."""
         # Preserve context that may already have been injected into AgentState
@@ -320,6 +322,7 @@ class RuleBasedPlanner:
 
         return None
 
+    @instrument('planner', 'plan')
     def plan(
         self,
         state: AgentState,

@@ -4,6 +4,7 @@ from enum import Enum
 
 from pydantic import BaseModel
 
+from app.observability.telemetry import instrument
 from app.agentic.planner import RuleBasedPlanner
 from app.agentic.state import AgentState
 from app.memory.write_back import MemoryWriteBack
@@ -140,6 +141,7 @@ class AdaptiveOrchestrator:
             )
         )
 
+    @instrument('orchestrator', 'execute')
     def execute(
         self,
         state: AgentState,

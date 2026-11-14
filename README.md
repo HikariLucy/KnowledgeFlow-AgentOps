@@ -11,13 +11,19 @@ Continuación de la solución organizacional **NovaTech SpA**:
 
 Agregar **observabilidad, trazabilidad y evaluación reproducible** a la base de agentes funcionales sin rehacer el RAG ni el orquestador. Las métricas deben permitir identificar errores, medir calidad, latencia y uso de recursos, y documentar mejoras fundamentadas en evidencia.
 
-**Dashboard:** interfaz propia con **FastAPI + HTML/CSS/JavaScript**, integrada con la UI actual del agente; **sin Streamlit**. Su implementación es un hito pendiente; no se presentan métricas simuladas como resultados reales.
+**Dashboard:** interfaz propia con **FastAPI + HTML/CSS/JavaScript**, integrada con la UI actual del agente; **sin Streamlit**. Implementación local documentada en [docs/14](docs/14-dashboard-web.md); no se presentan métricas simuladas como resultados reales.
 
 ## Estado de migración
 
 **Completada:** 141 archivos de EP2 importados y verificados por SHA, incluidos código, tests, UI, documentación y datasets. El README histórico se conserva en [docs/legacy/README_EP2.md](docs/legacy/README_EP2.md). Consultar [acta técnica de migración](docs/legacy/MIGRACION-EP2.md).
 
-**Pendiente:** ejecutar `pytest -q` en el nuevo entorno, implementar observabilidad, benchmark EP3 y dashboard web propio.
+**Verificado:** regresión offline de EP1/EP2 y capa local de observabilidad JSON con trazas, latencias y tokens reportados por el proveedor. Configuración, comandos y evidencia: [Observabilidad local segura](docs/12-observabilidad.md).
+
+**Agregación operacional:** almacenamiento SQLite acotado y API de lectura protegida; ver [Hito 3](docs/13-agregacion-metricas.md).
+
+**Dashboard local:** consola de lectura protegida en `/dashboard`, desactivada por defecto. [Ejecución, contratos y límites](docs/14-dashboard-web.md).
+
+**Pendiente:** validación visual en navegador, benchmark EP3 y evaluación live autorizada.
 
 ## Base migrada desde EP2
 
@@ -40,10 +46,10 @@ Windows: activar `.venv\Scripts\Activate.ps1`. Las dependencias y pruebas se ver
 | Hito | Entregable | Estado |
 |---|---|---|
 | 0 | Migrar EP2 y documentar línea base | **Completado (141/141 archivos verificados)** |
-| 1 | Auditoría técnica y pruebas offline | Pendiente |
-| 2 | Logging JSON, trace/span IDs y medición de latencia | Pendiente |
-| 3 | Benchmark y métricas (calidad, consistencia, errores, recursos) | Pendiente |
-| 4 | Dashboard web propio, filtros y detalle de trazas | Pendiente |
+| 1 | Auditoría técnica y pruebas offline | Verificado; ver docs/12 |
+| 2 | Logging JSON, trace/span IDs y medición de latencia | Implementado localmente; límites en docs/12 |
+| 3 | Agregación operacional y contrato de calidad | Implementado localmente; benchmark evaluado pendiente |
+| 4 | Dashboard web propio, filtros y detalle de trazas | Implementado localmente; ver validación y límites en docs/14 |
 | 5 | Evidencia, informe EP3 y defensa | Pendiente |
 | 6 | Notebook demostrativo para EFT | Pendiente |
 

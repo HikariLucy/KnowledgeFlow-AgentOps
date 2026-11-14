@@ -1,6 +1,7 @@
 """Semantic retrieval pipeline combining query embedding and FAISS vector search."""
 
 from typing import List, Optional
+from app.observability.telemetry import instrument
 from app.core.config import Settings, get_settings
 from app.rag.embeddings import BaseEmbeddings, GeminiEmbeddings
 from app.rag.schemas import SearchResult, SourceType
@@ -20,6 +21,7 @@ class Retriever:
         self.settings = settings or get_settings()
         self.embeddings = embeddings or GeminiEmbeddings(settings=self.settings)
 
+    @instrument('rag', 'retrieve')
     def search(
         self,
         query: str,

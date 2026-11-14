@@ -33,3 +33,6 @@ evaluation/results/*
 # OS
 .DS_Store
 Thumbs.db
+
+# Local observability output (metadata remains access-controlled)
+data/observability/

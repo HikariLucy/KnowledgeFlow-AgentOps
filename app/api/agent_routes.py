@@ -1,10 +1,10 @@
 """FastAPI endpoint for the KnowledgeFlow agentic runtime."""
 
-import logging
 from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.observability.telemetry import bind_session, current_span, safe_log
 from app.agentic.orchestrator import AdaptiveOrchestrator
 from app.agentic.planner import RuleBasedPlanner
 from app.agentic.service import AgentService
@@ -26,8 +26,6 @@ from app.tools.incidents import (
 )
 from app.tools.knowledge import KnowledgeRAGTool
 
-
-logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["Agent"])
 
@@ -95,11 +93,16 @@ async def execute_agent(
 ) -> AgentResponse:
     """Execute one validated agent request."""
     try:
-        return service.execute(request)
+        bind_session(request.conversation_id)
+        response = service.execute(request)
+        active = current_span()
+        if active is not None:
+            active.result(response)
+        return response
     except HTTPException:
         raise
     except Exception as exc:
-        logger.exception("Error executing agent workflow: %s", exc)
+        safe_log('workflow_error', error=exc)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while executing the agent workflow.",

@@ -1,16 +1,14 @@
 """Grounded RAG answer generation with Google Gemini and citation validation."""
 
 from abc import ABC, abstractmethod
-import logging
 from typing import Callable, List, Optional, Set, Tuple
 
+from app.observability.telemetry import instrument, provider_call, safe_log
 from app.core.config import Settings, get_settings
 from app.llm.client import GeminiClient, get_gemini_client
 from app.rag.context import extract_citations_from_text, validate_citations
 from app.rag.prompts import RAG_SYSTEM_PROMPT, format_rag_user_prompt
 from app.rag.schemas import SourceReference, SourceScope
-
-logger = logging.getLogger(__name__)
 
 
 class BaseRAGGenerator(ABC):
@@ -64,7 +62,8 @@ class GeminiRAGGenerator(BaseRAGGenerator):
         response = None
         for attempt in range(4):
             try:
-                response = client.models.generate_content(
+                response = provider_call(
+                    'generate', client.models.generate_content,
                     model=self.settings.gemini_chat_model,
                     contents=user_prompt,
                     config=config,
@@ -76,12 +75,7 @@ class GeminiRAGGenerator(BaseRAGGenerator):
                     sleep_time = 3.0 * (attempt + 1)
                     if "429" in str(ex) or "RESOURCE_EXHAUSTED" in str(ex):
                         sleep_time = 8.0 * (attempt + 1)
-                    logger.warning(
-                        "GeminiRAGGenerator attempt %d failed (%s). Retrying in %.1fs...",
-                        attempt + 1,
-                        ex,
-                        sleep_time,
-                    )
+                    safe_log('provider_retry', error=ex)
                     time.sleep(sleep_time)
                     continue
                 raise ex
@@ -91,6 +85,7 @@ class GeminiRAGGenerator(BaseRAGGenerator):
 
         return response.text.strip()
 
+    @instrument('rag', 'generate')
     def generate(
         self,
         query: str,
@@ -120,10 +115,7 @@ class GeminiRAGGenerator(BaseRAGGenerator):
         else:
             reason = "no incluiste ninguna cita documental obligatoria [S#] de la evidencia provista"
 
-        logger.warning(
-            "Generation citation validation failed (%s). Attempting 1 repair...",
-            reason,
-        )
+        safe_log('citation_repair')
         repair_prompt = (
             f"{user_prompt}\n\n"
             f"[ADVERTENCIA DE CORRECCIÓN]: En el intento anterior {reason}. "
@@ -139,7 +131,7 @@ class GeminiRAGGenerator(BaseRAGGenerator):
             if is_valid_repaired:
                 return repaired_text, rep_valid_cits, True
         except Exception as e:
-            logger.error("Error during citation repair attempt: %s", e)
+            safe_log('citation_repair_failed', error=e)
 
         # 4. If repair still failed or threw an error, return controlled fallback
         fallback_text = (

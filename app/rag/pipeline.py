@@ -1,6 +1,8 @@
+
 import math
 from typing import TYPE_CHECKING, List, Optional
 
+from app.observability.telemetry import instrument
 from app.core.config import Settings, get_settings
 from app.rag.context import build_rag_context
 from app.rag.generator import BaseRAGGenerator, GeminiRAGGenerator
@@ -80,6 +82,7 @@ class RAGPipeline:
         combined.sort(key=lambda x: x.score, reverse=True)
         return combined[:top_k]
 
+    @instrument('rag', 'run')
     def run(
         self,
         query: str,

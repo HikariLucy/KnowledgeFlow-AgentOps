@@ -2,14 +2,13 @@
 
 from pathlib import Path
 from typing import List, Optional, Union
-import logging
 
 from langchain_core.documents import Document
 from pypdf import PdfReader
 
+from app.observability.telemetry import safe_log
 from app.rag.schemas import SourceType
 
-logger = logging.getLogger(__name__)
 
 SUPPORTED_EXTENSIONS = {".txt", ".md", ".pdf"}
 
@@ -147,9 +146,9 @@ def load_directory(
                     docs = load_document(item, source_type=source_type)
                     documents.extend(docs)
                 except Exception as e:
-                    logger.warning("Could not load file %s: %s", item, e)
+                    safe_log('document_load_failed', error=e)
             else:
-                logger.debug("Skipping unsupported file: %s", item)
+                safe_log('document_skipped')
 
     return documents
 
