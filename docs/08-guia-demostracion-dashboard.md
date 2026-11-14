@@ -3,7 +3,7 @@
 **Proyecto:** KnowledgeFlow AgentOps (EP3)  
 **Interfaz:** FastAPI + HTML/CSS/JavaScript, sin Streamlit  
 **URL:** http://127.0.0.1:8000/dashboard  
-**Última actualización:** 13 de noviembre de 2026
+**Última actualización:** 14 de noviembre de 2026
 
 > **Estado del código:** el dashboard fue implementado y comprobado visualmente por el equipo **en su entorno local**, sobre `feat/observability`. Al publicar esta guía, la rama remota `main` todavía **no contenía** `app/api/dashboard_routes.py` ni los archivos del dashboard. **Por tanto, estos comandos requieren la copia local actualizada o una integración futura de esa rama.** La guía no significa que el código de M4 se haya subido a GitHub.
 
@@ -128,7 +128,7 @@ Ahora se instrumentarán las **ejecuciones nuevas** de los flujos habilitados. L
 - No publicar `.env`, contraseña del dashboard, `OBS_READ_KEY`, cookies, datos personales, logs sensibles ni contenido de incidentes.
 - Los endpoints administrativos `/api/observability/*` usan **`X-Observability-Key`** de forma independiente. **No hace falta** configurarla para el dashboard local y nunca debe insertarse en JavaScript.
 - El dashboard es de **solo lectura**; no crea incidentes ni ejecuta agentes.
-- Los reportes anteriores del equipo indican **341 pruebas Python offline y 6 pruebas JavaScript aprobadas**, pero **no constituyen prueba de navegación visual integral**. Las capturas locales recientes muestran que el dashboard ya abre y renderiza sus secciones; falta finalizar la auditoría visual/interacciones del Hito 4.
+- **Auditoría visual completada según reporte local del equipo (14-11-2026):** 341 pruebas Python offline en ambos modos OBS, 6 pruebas JavaScript, y revisión real en Chromium con Playwright de autenticación, navegación, tooltips, filtros, paginación, trazas y viewports **1440×900, 768×1024, 390×844** sin desbordamiento horizontal. Los datos poblados procedían de **SQLite temporal `mock`**, eliminada después; esto **no** significa que haya evidencia de calidad real del agente. Código, informe `docs/15-validacion-visual.md` y capturas permanecen locales y **no están aún en `main`**. Auditoría/ejecuciones no reproducidas independientemente por quien escribe esta guía.
 - Documentación técnica de la rama local: `docs/12-observabilidad.md`, `docs/13-agregacion-metricas.md` y `docs/14-dashboard-web.md`.
 
 ---
