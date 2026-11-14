@@ -1,20 +1,129 @@
-# Roadmap incremental — EP3 y EFT
+# Roadmap de desarrollo — KnowledgeFlow AgentOps
 
-| Hito | Tarea | Criterio de cierre | Estado |
-|---|---|---|---|
-| M0 | Migración desde EP2 | 141 archivos comparados por SHA | **Completado** |
-| M1 | Auditoría y regresión | `pytest -q` documentado; mapa de riesgos y puntos de instrumentación | Pendiente |
-| M2 | Trazas JSON | IDs relacionados, latencias, errores sanitizados y tests | Pendiente |
-| M3 | Evaluación reproducible | Benchmark, dataset revisado, resultados desglosados, pruebas | Pendiente |
-| M4 | Dashboard propio | Filtros, KPIs, gráficos, explorador de spans y estados vacíos | Pendiente |
-| M5 | Seguridad | Revisión de permisos, redacción, retención y casos maliciosos | Pendiente |
-| M6 | Evidencias EP3 | Capturas, análisis de logs, material presentación, informe máx. 5 páginas | Pendiente |
-| M7 | EFT | Notebook/Colab de demostración, informe académico, defensa individual | Pendiente |
+**Última actualización:** 13 de noviembre de 2026  
+**Asignatura:** Ingeniería de Soluciones con IA · EP3, con preparación posterior para la EFT  
+**Proyecto:** KnowledgeFlow AgentOps · caso NovaTech SpA  
+**Dashboard elegido:** interfaz propia con FastAPI + HTML/CSS/JavaScript; **sin Streamlit**.
 
-## Regla de ejecución con Codex
+> **Avance EP3 estimado: 50 %** (50 puntos completados de 100 ponderados). Esta cifra se basa en hitos técnicos, **no representa porcentaje de calificación ni avance de la EFT**. M1, M2 y M3 se marcan como completados *según los reportes locales de Codex compartidos por el equipo*, no como verificados independientemente ni publicados en GitHub. El repositorio remoto `main` todavía no contenía esos cambios a la fecha de esta actualización.
 
-Trabajar por hitos. Cada hito termina con **diff revisado, pruebas offline, riesgos y evidencia**. Antes de pasar al siguiente, comprobar que EP2 siga funcionando. No ejecutar APIs live ni hacer push automáticamente sin autorización del equipo.
+## 1. Cálculo de avance
 
-## Primeros prompts
+Los pesos son una **estimación de gestión del proyecto**, no los porcentajes de la rúbrica académica.
 
-Ver `prompts/01-auditoria-repositorio.md`, `02-instrumentacion-trazas.md`, `03-benchmark.md`, `04-dashboard-propio.md` y `05-notebook-eft.md`.
+| Hito | Entregable y alcance | Peso EP3 | Avance del hito | Aporte al total | Estado y evidencia |
+|:---|:---|---:|---:|---:|:---|
+| **M0** | Migración de EP1/EP2 y base reproducible | 10 % | 100 % | **10 %** | Completado en GitHub; 141/141 blobs cotejados por SHA |
+| **M1** | Auditoría técnica y regresión offline | 10 % | 100 % | **10 %** | Completado según reporte local; auditoría y 242 tests base reportados |
+| **M2** | Logging JSON, spans, correlación, latencias y sanitización | 15 % | 100 % | **15 %** | Completado según reporte local; 275 pruebas totales reportadas |
+| **M3** | SQLite, agregación de métricas, filtros, retención y API GET protegida | 15 % | 100 % | **15 %** | Completado según reporte local; 313 pruebas totales reportadas |
+| **M4** | Dashboard web propio y explorador de trazas | 20 % | 0 % | **0 %** | Pendiente |
+| **M5** | Benchmark evaluado: precisión, consistencia, errores, escenarios variados | 15 % | 0 % | **0 %** | Pendiente; calidad sigue N/D |
+| **M6** | Seguridad integral, pruebas adversariales y validación de integración | 10 % | 0 % | **0 %** | Pendiente; controles parciales de M2/M3 no equivalen a cierre de seguridad |
+| **M7** | Evidencias, informe EP3 y presentación | 5 % | 0 % | **0 %** | Pendiente |
+| **Total** | **Evaluación Parcial N.º 3** | **100 %** | — | **50 %** | **Estimación basada en reportes del equipo** |
+
+**Fórmula:** `avance = suma(peso_hito × fracción_de_cierre)`. En el estado actual: `10 + 10 + 15 + 15 + 0 + 0 + 0 + 0 = 50 %`.
+
+**Estado del repositorio remoto vs. implementación local:**
+
+- **Verificado remotamente:** M0 (código y documentación de EP2 copiados, sin transferir historial completo).
+- **Reportado como desarrollado localmente:** M1, M2 y M3. La rama local `feat/observability`, sus documentos `docs/10-auditoria-ep2.md`, `docs/11-plan-implementacion-ep3.md`, `docs/12-observabilidad.md` y `docs/13-agregacion-metricas.md` no estaban publicados en `main` durante la comprobación.
+- **Pendiente de verificación independiente:** ejecutar y revisar tests y código de M1–M3 cuando se suba la rama. No atribuir automáticamente esos reportes a `main`.
+- **Ritmo de pruebas informado:** base 242 → observabilidad 275 → agregación 313; estos valores provienen de los reportes de Codex. No se realizaron ejecuciones de CI desde este documento.
+
+## 2. Fases siguientes y criterios de cierre
+
+### M4 — Dashboard web propio (20 %; siguiente hito)
+
+**Objetivo:** visualización accesible de los eventos almacenados, integrada a la aplicación existente.
+
+- [ ] Confirmar contratos reales de `GET /api/observability/events`, `metrics` y `quality` en la rama con M3.
+- [ ] Diseñar acceso **seguro desde el servidor**: nunca incrustar `X-Observability-Key` en JavaScript o HTML público; no crear un proxy abierto que eluda autenticación.
+- [ ] Crear vista general de solicitudes, estados, tasa de errores, p50/p95, tiempos por componente y cobertura de tokens.
+- [ ] Crear gráficos de tendencias y distribuciones a partir de agregados reales; nunca inventar mediciones.
+- [ ] Crear tabla filtrable y paginada por cursor `limit/after`, con modo de ejecución visible.
+- [ ] Permitir explorar un `trace_id`: eventos, timeline y árbol de `span_id`/`parent_span_id`.
+- [ ] Señalar explícitamente las trazas truncadas por retención y los resultados **N/D**.
+- [ ] Pasar pruebas de rutas, autenticación, XSS, estados vacíos, responsive y regresión offline.
+- [ ] Documentar en `docs/14-dashboard-web.md`, con capturas identificadas según su origen.
+
+**Cierre:** interfaz navegable sobre datos locales y protegidos; sin dependencias live; sin secretos expuestos; suite offline aprobada.
+
+### M5 — Benchmark experimental (15 %)
+
+**Objetivo:** pasar de métricas operacionales a evidencia de **calidad** sobre el agente.
+
+- [ ] Revisar/reutilizar `evaluation/dataset_verified.json` y construir datasets EP3 evaluables con etiquetas revisadas.
+- [ ] Definir ground truth, criterios de corrección/equivalencia y muestras N por escenario.
+- [ ] Medir tareas: consulta RAG interna y externa, abstención, creación/búsqueda/nota de incidentes, continuidad multi-turno, casos incompletos y fallas controladas.
+- [ ] Medir **precisión/exactitud**, consistencia en repeticiones válidas, frecuencia de errores y latencia sin mezclar `offline`, `mock`, `live` o particiones heredadas.
+- [ ] Registrar SHA, modelo, parámetros, dataset y `trace_id` de los ensayos.
+- [ ] Si se autorizan pruebas `live`, limitar cuota y documentar el costo; no ejecutarlas por defecto.
+- [ ] Poblar `/api/observability/quality` solo desde resultados efectivamente evaluados.
+- [ ] Generar tablas reproducibles y casos fallidos sin fabricar métricas.
+
+**Cierre:** benchmark reproducible, con muestras declaradas, calidad evaluada y evidencia asociada.
+
+### M6 — Seguridad, robustez y validación integral (10 %)
+
+- [ ] Revisar la autenticación/autorización de `/api/agent` y `/api/observability/*`; la API key de telemetría no resuelve por sí misma toda la seguridad del agente.
+- [ ] Verificar redacción de secretos, datos personales, prompts sensibles, contexto de memoria y contenido de incidentes.
+- [ ] Probar control de acceso, sanitización de excepciones, límites de consulta, casos de prompt injection y prevención de XSS.
+- [ ] Evaluar impacto de escritura síncrona a SQLite sobre latencia (comparar OBS activado/desactivado).
+- [ ] Documentar retención, rotación, truncamiento de trazas y uso de espacio adicional por journaling.
+- [ ] Ejecutar regresión offline y documentar limitaciones; no afirmar garantías de producción sin pruebas.
+
+**Cierre:** matriz de riesgos y pruebas de seguridad, sin fallos críticos abiertos para la demostración.
+
+### M7 — Evidencia, informe y presentación EP3 (5 %)
+
+- [ ] Consolidar capturas y gráficos verdaderos del dashboard.
+- [ ] Preparar tabla de resultados y análisis de ejecución con datos verificables.
+- [ ] Preparar informe de hasta **5 páginas**, según la pauta de EP3 consultada, con referencias APA.
+- [ ] Registrar el uso de IA; las **justificaciones técnicas, conclusiones y reflexiones** deben redactarlas los estudiantes.
+- [ ] Preparar demo y exposición grupal **10 minutos + 10 minutos de preguntas** según la pauta disponible.
+- [ ] Comprobar la pauta y fecha aplicable con el docente antes de entregar por AVA y correo.
+
+**Cierre:** todos los entregables reproducibles y disponibles para el evaluador.
+
+## 3. Riesgos y bloqueos inmediatos
+
+| Riesgo | Consecuencia | Acción de mitigación |
+|---|---|---|
+| M1–M3 siguen sin push/merge | `main` no representa el 50 % estimado | Revisar `git status`, realizar commit local, publicar rama y abrir PR sin sobrescribir trabajo |
+| Clave de observabilidad expuesta al navegador | Lectura no autorizada de telemetría | Proteger por sesión/autorización en servidor, sin `X-Observability-Key` visible en cliente |
+| Precisión y consistencia siguen `null` | Rubrica de calidad aún no demostrada | Diseñar y ejecutar benchmark evaluado con ground truth |
+| Retención puede cortar una traza | Diagnósticos incompletos | Marcar traza parcial y documentar cobertura del período |
+| SQLite síncrono y journaling | Posible latencia adicional/uso de disco | Medir overhead y espacio con dataset reproducible |
+| Reportes de pruebas solo locales | Falta evidencia auditada en repositorio remoto | Publicar la rama y validar en entorno limpio o CI |
+| Discrepancia de sigla EP3/EFT | Riesgo de aplicar instrucciones equivocadas | Confirmar con docente cuál pauta corresponde a EP3 |
+
+## 4. Próximas acciones, en orden
+
+1. **Punto de control Git:** proteger los cambios locales; commit en `feat/observability`, comparar con `origin/main` actualizado y publicar la rama con revisión. No mezclar este roadmap con las modificaciones funcionales sin revisar diffs.
+2. **Implementar M4:** frontend propio usando las APIs GET de M3, con control de acceso de servidor.
+3. **Implementar M5:** benchmark y pruebas repetibles, distinguir datos sintéticos de datos reales.
+4. **Cerrar M6 y M7:** seguridad, regresión, informe y presentación.
+
+No se asignan fechas exactas porque el equipo no ha confirmado el calendario de entrega vigente.
+
+## 5. Relación con la Evaluación Final Transversal (EFT)
+
+La **EFT no está incluida en el 50 %**. Es una etapa posterior que aprovecha EP1 + EP2 + EP3; debe contar con una planificación y porcentaje independiente.
+
+| Frente EFT | Entregable futuro |
+|---|---|
+| Integración | Mostrar RAG, agentes, herramientas, memoria, planificación, observabilidad y seguridad en una solución coherente |
+| Notebook/Colab | Demostración reproducible del código solicitado por la pauta EFT |
+| Informe | PDF académico con arquitectura, datos y resultados reales |
+| Defensa individual | Hasta 10 minutos por estudiante con prototipo y dashboard |
+| Ética | Declaración de IA; reflexión y conclusiones redactadas por el propio estudiante |
+
+---
+
+## 6. Mantenimiento de progreso
+
+Actualizar este archivo **solo con evidencia**. Para cada cambio de estado, registrar rama/commit, comando de pruebas, muestras, capturas y documento de respaldo.
+
+- **13-11-2026:** progreso inicial fijado en **50 % EP3**, sumando M0–M3. M1–M3 basados en reportes locales; M4–M7 pendientes.
