@@ -1,5 +1,6 @@
 """Knowledge retrieval tool backed by the existing EP1 RAG pipeline."""
 
+from app.observability.telemetry import instrument
 from app.rag.pipeline import RAGPipeline
 from app.tools.schemas import (
     KnowledgeQueryInput,
@@ -27,6 +28,7 @@ class KnowledgeRAGTool:
     def __init__(self, pipeline: RAGPipeline) -> None:
         self.pipeline = pipeline
 
+    @instrument('tool', 'search_knowledge')
     def run(self, arguments: KnowledgeQueryInput) -> KnowledgeQueryResult:
         """Execute the existing RAG pipeline and return an agent-safe result."""
         answer = self.pipeline.run(

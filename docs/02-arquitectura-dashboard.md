@@ -1,4 +1,6 @@
-# Arquitectura EP3 — Dashboard propio (propuesta)
+# Arquitectura EP3 — Dashboard propio
+
+> El diagrama y boceto siguientes conservan la propuesta inicial. Implementación local actual: SQLite (Hito 3), rutas autenticadas `/dashboard/api/*` y HTML protegido fuera de static (Hito 4). Ver [contrato y límites actuales](14-dashboard-web.md).
 
 ## Base migrada del agente
 
@@ -71,4 +73,4 @@ KnowledgeFlow / AgentOps
 └───────────────┴─────────────────────────────────────────────────────────┘
 ```
 
-**Estado:** especificación, no UI implementada.
+**Estado:** dashboard local implementado; validación visual en navegador pendiente por restricciones del entorno. Ver docs/14 para evidencia ejecutada.

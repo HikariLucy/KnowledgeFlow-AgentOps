@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Consola local de observabilidad de KnowledgeFlow AgentOps. Solo lectura.">
+  <title>Observabilidad · KnowledgeFlow</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/observability/dashboard.css">
+  <script type="module" src="/static/observability/dashboard.mjs"></script>
+</head>
+<body class="obs-page">
+<a class="skip-link" href="#overview">Ir al contenido</a>
+<aside class="sidebar" aria-label="Navegación principal">
+  <a class="obs-brand" href="/"><span class="brand-glyph" aria-hidden="true">KF</span><span>KnowledgeFlow<small>AGENTOPS / OBSERVABILIDAD</small></span></a>
+  <span class="nav-caption">ESPACIO DE TRABAJO</span>
+  <nav class="workspace-nav"><a href="/">↗ Consulta RAG</a><a href="/agent">↗ Agente</a></nav>
+  <span class="nav-caption">MONITOREO</span>
+  <nav class="section-nav">
+    <a href="#overview" aria-current="location"><span>01</span> Vista general</a>
+    <a href="#performance"><span>02</span> Rendimiento</a>
+    <a href="#executions"><span>03</span> Ejecuciones</a>
+    <a href="#traces"><span>04</span> Explorador de trazas</a>
+    <a href="#quality"><span>05</span> Calidad del agente</a>
+  </nav>
+  <div class="local-note"><span class="status-dot"></span> Acceso local protegido<p>Solo lectura · Sin llamadas a modelos</p><small>La captura puede ser parcial. Esta consola no ejecuta agentes.</small></div>
+</aside>
+<main class="obs-main">
+  <header class="obs-header"><div class="breadcrumb">KNOWLEDGEFLOW <span>/</span> TELEMETRÍA LOCAL</div><span class="badge">LECTURA</span></header>
+  <section id="overview" class="overview">
+    <div class="page-heading"><div><span class="eyebrow">OBSERVABILIDAD DE AGENTES</span><h1>Del resultado a la traza.</h1><p>Inspecciona la actividad, el rendimiento y los eventos de cada ejecución.</p></div><div class="update-meta"><span id="capture-state">Captura: N/D</span><small id="last-update">Sin actualización</small></div></div>
+    <form id="filters" class="filter-panel">
+      <label>Modo de ejecución<select id="mode" name="execution_mode"><option value="offline">Offline</option><option value="mock">Mock · datos sintéticos</option><option value="live">Live</option><option value="unknown">Unknown · sin clasificar</option><option value="offline_mock">Offline_mock · heredado</option></select></label>
+      <label>Período<select id="period"><option value="1">Última hora</option><option value="24" selected>Últimas 24 horas</option><option value="168">Últimos 7 días</option><option value="custom">Personalizado</option></select></label>
+      <label>Desde · hora local<input type="datetime-local" id="since" required step="1"></label>
+      <label>Hasta · hora local<input type="datetime-local" id="until" required step="1"></label>
+      <label>Componente<select id="component"><option value="">Todos</option></select></label>
+      <label>Operación<select id="operation"><option value="">Todas</option></select></label>
+      <label>Estado técnico<select id="status"><option value="">Todos</option><option value="ok">Correcto · ok</option><option value="error">Error</option><option value="cancelled">Cancelado</option></select></label>
+      <button class="primary" type="submit" id="apply">↻ Aplicar y actualizar</button>
+    </form>
+    <div class="context-strip"><span id="mode-note">OFFLINE · Ejecuciones locales</span><span id="period-note">Selecciona un período</span></div>
+    <div id="notice" class="notice" role="status" aria-live="polite">Preparando la consola…</div>
+    <div id="kpis" class="kpi-grid" aria-label="Indicadores principales"></div>
+    <p class="coverage-note" id="coverage-note">Cobertura: eventos retenidos. No se garantiza una historia completa.</p>
+  </section>
+  <section id="performance">
+    <div class="section-heading"><h2><span>02 /</span> Rendimiento</h2><p>El período y los filtros se aplican a todos los indicadores.</p></div>
+    <div class="chart-grid">
+      <article class="panel chart-wide"><div class="panel-heading"><h3>Latencia HTTP en el tiempo</h3><span>MEDIA · ms</span></div><p>24 intervalos por fecha de finalización. Los intervalos sin muestras permanecen vacíos.</p><div id="latency-chart" class="chart"></div></article>
+      <article class="panel"><div class="panel-heading"><h3>Latencia por componente</h3><span>INCLUSIVA · ms</span></div><div id="component-chart" class="chart"></div><p>Los padres incluyen a sus hijos; las duraciones no se suman.</p></article>
+      <article class="panel"><div class="panel-heading"><h3>Resultados de ejecución</h3><span>AGENT / EXECUTE</span></div><div id="outcome-chart" class="chart"></div><p>Resultado de dominio; un HTTP 200 no garantiza éxito del agente.</p></article>
+      <article class="panel chart-wide"><div class="panel-heading"><h3>Frecuencia de errores HTTP</h3><span>ERRORES / INTERVALO</span></div><div id="error-chart" class="chart"></div></article>
+      <article class="panel"><div class="panel-heading"><h3>Uso de herramientas</h3><label class="compact-label">Medida<select id="tool-measure"><option value="count">Invocaciones</option><option value="mean">Duración media · ms</option></select></label></div><div id="tool-chart" class="chart"></div></article>
+      <article class="panel"><div class="panel-heading"><h3>Tokens reportados</h3><span>SUMA OBSERVADA</span></div><div id="token-chart" class="chart"></div><p>Input + output no necesariamente equivale a total. No se estiman datos ausentes.</p></article>
+    </div>
+  </section>
+  <section id="executions" class="panel">
+    <div class="section-heading"><h2><span>03 /</span> Ejecuciones y eventos</h2><span class="badge" id="event-count">N/D eventos</span></div>
+    <p>Una fila por evento retenido; una traza puede tener varias filas. Selecciona su ID para explorarla.</p>
+    <div class="table-scroll"><table><thead><tr><th>Trace ID</th><th>Fecha · UTC</th><th>Modo</th><th>Componente / operación</th><th>Estado</th><th>Duración</th><th>Error</th></tr></thead><tbody id="event-body"><tr><td colspan="7">Sin consulta</td></tr></tbody></table></div>
+    <div class="pagination"><span id="page-label">Página 1 · hasta 50 eventos</span><div><button id="previous" disabled>← Anterior</button><button id="next" disabled>Siguiente →</button></div></div>
+  </section>
+  <section id="traces" class="panel">
+    <div class="section-heading"><h2><span>04 /</span> Explorador de trazas</h2><span class="badge">EVENTOS RETENIDOS</span></div>
+    <form id="trace-form" class="trace-search"><label for="trace-input">Trace ID<input id="trace-input" placeholder="32 caracteres hexadecimales" pattern="[a-f0-9]{32}" maxlength="32" required autocomplete="off"></label><button type="submit">Explorar traza →</button></form>
+    <p>Consulta el modo aplicado en todo el período retenido, sin filtros de componente, operación ni estado.</p>
+    <div id="trace-notice" class="notice" role="status">Selecciona una traza para inspeccionar sus spans.</div>
+    <div id="trace-tree"></div>
+    <div class="trace-tools"><h3>Secuencia de herramientas observada</h3><ol id="trace-tools"></ol></div>
+    <button id="trace-more" disabled hidden>Cargar siguiente página de la traza</button>
+  </section>
+  <section id="quality" class="panel quality-panel">
+    <div><span class="eyebrow">05 / EVALUACIÓN SEPARADA</span><h2>Calidad del agente</h2><p>La ausencia de errores no demuestra calidad. Estos indicadores requieren benchmarks con ground truth, dataset y evaluador versionados.</p><span id="quality-state" class="badge">Sin evaluación validada</span><p id="quality-meta" class="quality-meta" hidden></p></div>
+    <div class="quality-metric"><span>Precisión</span><strong id="precision">N/D</strong><small id="precision-detail">Sin muestras evaluadas</small></div>
+    <div class="quality-metric"><span>Consistencia</span><strong id="consistency">N/D</strong><small id="consistency-detail">Sin repeticiones evaluadas</small></div>
+    <div id="quality-scenarios" class="table-scroll quality-scenarios" hidden><table><thead><tr><th>Escenario</th><th>Evaluables</th><th>Correctos</th><th>Incorrectos</th><th>Pendientes</th></tr></thead><tbody id="quality-scenario-body"></tbody></table></div>
+  </section>
+  <footer class="obs-footer"><span>KnowledgeFlow / AgentOps</span><span>Metadatos operacionales · Sin contenido de conversaciones</span></footer>
+</main>
+<noscript>Esta consola necesita JavaScript. No se ejecutarán consultas sin él.</noscript>
+</body>
+</html>
