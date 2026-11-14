@@ -3,13 +3,14 @@
 | Hito | Tarea | Criterio de cierre | Estado |
 |---|---|---|---|
 | M0 | Migración desde EP2 | 141 archivos comparados por SHA | **Completado** |
-| M1 | Auditoría y regresión | `pytest -q` documentado; mapa de riesgos y puntos de instrumentación | Pendiente |
-| M2 | Trazas JSON | IDs relacionados, latencias, errores sanitizados y tests | Pendiente |
-| M3 | Evaluación reproducible | Benchmark, dataset revisado, resultados desglosados, pruebas | Pendiente |
-| M4 | Dashboard propio | Filtros, KPIs, gráficos, explorador de spans y estados vacíos | Pendiente |
-| M5 | Seguridad | Revisión de permisos, redacción, retención y casos maliciosos | Pendiente |
-| M6 | Evidencias EP3 | Capturas, análisis de logs, material presentación, informe máx. 5 páginas | Pendiente |
-| M7 | EFT | Notebook/Colab de demostración, informe académico, defensa individual | Pendiente |
+| M1 | Auditoría y regresión | `pytest -q` documentado; mapa de riesgos y puntos de instrumentación | **Completado** (`docs/10-auditoria-ep2.md`) |
+| M2 | Trazas JSON | IDs relacionados, latencias, errores sanitizados y tests | **Completado** (`docs/12-observabilidad.md`) |
+| M3 | Agregación y métricas | SQLite acotado y API protegida | **Completado** (`docs/13-agregacion-metricas.md`) |
+| M4 | Dashboard propio | Filtros, KPIs, gráficos, explorador de spans, estados vacíos y Playwright | **Completado** (`docs/14-dashboard-web.md`, `docs/15-validacion-visual.md`) |
+| M5 | Evaluación reproducible | Benchmark offline, dataset revisado, resultados desglosados, pruebas | **Completado offline** (`docs/16-benchmark-experimental.md`; live pendiente) |
+| M6 | Seguridad | Revisión de permisos, redacción, retención, XSS y casos maliciosos | **Completado (alcance local)** (`docs/17-auditoria-seguridad.md`) |
+| M7 | Evidencias EP3 | Evidencias, guion demo, checklist y base de informe máx. 5 páginas | **Base técnica lista** (`docs/18`, `docs/19`, `docs/20`; falta autoría humana y defensa) |
+| EFT | Preparación EFT | Notebook/Colab de demostración, informe académico, defensa individual | Pendiente (fuera del alcance EP3) |
 
 ## Regla de ejecución con Codex
 

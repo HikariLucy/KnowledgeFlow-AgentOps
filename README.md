@@ -21,9 +21,11 @@ Agregar **observabilidad, trazabilidad y evaluación reproducible** a la base de
 
 **Agregación operacional:** almacenamiento SQLite acotado y API de lectura protegida; ver [Hito 3](docs/13-agregacion-metricas.md).
 
-**Dashboard local:** consola de lectura protegida en `/dashboard`, desactivada por defecto. [Ejecución, contratos y límites](docs/14-dashboard-web.md).
+**Dashboard local:** consola de lectura protegida en `/dashboard`, desactivada por defecto. [Ejecución, contratos y límites](docs/14-dashboard-web.md) y [validación visual Playwright](docs/15-validacion-visual.md).
 
-**Pendiente:** validación visual en navegador, benchmark EP3 y evaluación live autorizada.
+**Benchmark experimental offline:** runner determinista y métricas de calidad/consistencia en [Hito 5](docs/16-benchmark-experimental.md) (sin llamadas reales a Gemini).
+
+**Seguridad y evidencias EP3:** matriz de auditoría en [Hito 6](docs/17-auditoria-seguridad.md), [evidencias e informe base](docs/18-evidencias-ep3.md), [guion de demostración](docs/19-guion-demostracion.md) y [checklist](docs/20-checklist-entrega.md). Pendiente: evaluación live autorizada con Gemini y redacción humana del informe académico.
 
 ## Base migrada desde EP2
 
@@ -45,13 +47,14 @@ Windows: activar `.venv\Scripts\Activate.ps1`. Las dependencias y pruebas se ver
 
 | Hito | Entregable | Estado |
 |---|---|---|
-| 0 | Migrar EP2 y documentar línea base | **Completado (141/141 archivos verificados)** |
-| 1 | Auditoría técnica y pruebas offline | Verificado; ver docs/12 |
-| 2 | Logging JSON, trace/span IDs y medición de latencia | Implementado localmente; límites en docs/12 |
-| 3 | Agregación operacional y contrato de calidad | Implementado localmente; benchmark evaluado pendiente |
-| 4 | Dashboard web propio, filtros y detalle de trazas | Implementado localmente; ver validación y límites en docs/14 |
-| 5 | Evidencia, informe EP3 y defensa | Pendiente |
-| 6 | Notebook demostrativo para EFT | Pendiente |
+| M0 | Migrar EP2 y documentar línea base | **Completado (141/141 archivos verificados)** |
+| M1 | Auditoría técnica y pruebas offline | **Completado** (`docs/10`, `docs/12`) |
+| M2 | Logging JSON, trace/span IDs y latencia | **Completado** (`docs/12`) |
+| M3 | Agregación SQLite y API de lectura protegida | **Completado** (`docs/13`) |
+| M4 | Dashboard web propio y validación visual | **Completado** (`docs/14`, `docs/15`) |
+| M5 | Benchmark experimental offline | **Completado (offline)** (`docs/16`; evaluación live pendiente) |
+| M6 | Auditoría de seguridad integral | **Completado (alcance local)** (`docs/17`) |
+| M7 | Evidencias técnicas, guion y checklist EP3 | **Base técnica lista** (`docs/18`, `docs/19`, `docs/20`; pendiente autoría humana) |
 
 Documentos: [Resumen del proyecto](docs/00-resumen-proyecto.md) · [Alcance](docs/01-alcance-ep3.md) · [Arquitectura](docs/02-arquitectura-dashboard.md) · [Métricas](docs/03-metricas-y-pruebas.md) · [Seguridad](docs/04-seguridad-y-uso-ia.md) · [Roadmap](docs/05-roadmap.md) · [Prompts Codex](prompts/README.md).
 
