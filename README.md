@@ -17,7 +17,7 @@ Agregar **observabilidad, trazabilidad y evaluación reproducible** a la base de
 
 **Completada:** 141 archivos de EP2 importados y verificados por SHA, incluidos código, tests, UI, documentación y datasets. El README histórico se conserva en [docs/legacy/README_EP2.md](docs/legacy/README_EP2.md). Consultar [acta técnica de migración](docs/legacy/MIGRACION-EP2.md).
 
-**Pendiente:** ejecutar `pytest -q` en el nuevo entorno, implementar observabilidad, benchmark EP3 y dashboard web propio.
+**Estado EP3 al 13-11-2026:** avance **estimado 50 %** (M0–M3). M0 verificado en GitHub; M1 auditoría/regresión, M2 trazabilidad y M3 métricas están **reportados como completados localmente** por Codex (313 pruebas offline informadas) y **aún no están publicados en `main`**. Permanecen pendientes dashboard, benchmark de calidad, seguridad integral y entrega. Ver [roadmap ponderado](docs/05-roadmap.md).
 
 ## Base migrada desde EP2
 
@@ -37,15 +37,20 @@ Windows: activar `.venv\Scripts\Activate.ps1`. Las dependencias y pruebas se ver
 
 ## Plan de trabajo
 
-| Hito | Entregable | Estado |
-|---|---|---|
-| 0 | Migrar EP2 y documentar línea base | **Completado (141/141 archivos verificados)** |
-| 1 | Auditoría técnica y pruebas offline | Pendiente |
-| 2 | Logging JSON, trace/span IDs y medición de latencia | Pendiente |
-| 3 | Benchmark y métricas (calidad, consistencia, errores, recursos) | Pendiente |
-| 4 | Dashboard web propio, filtros y detalle de trazas | Pendiente |
-| 5 | Evidencia, informe EP3 y defensa | Pendiente |
-| 6 | Notebook demostrativo para EFT | Pendiente |
+**Progreso estimado EP3: 50 %** (elaboración ponderada; no es nota académica ni avance EFT).
+
+| Hito | Peso | Estado |
+|---|---:|---|
+| M0 Migración EP2 | 10 % | Verificado en GitHub |
+| M1 Auditoría y regresión offline | 10 % | Reportado completado localmente |
+| M2 Instrumentación JSON y trazabilidad | 15 % | Reportado completado localmente |
+| M3 SQLite, agregados y API de observabilidad | 15 % | Reportado completado localmente |
+| M4 Dashboard web propio | 20 % | Pendiente |
+| M5 Benchmark de precisión y consistencia | 15 % | Pendiente |
+| M6 Seguridad y validación integral | 10 % | Pendiente |
+| M7 Evidencias, informe y presentación EP3 | 5 % | Pendiente |
+
+[Roadmap completo y criterios de cierre](docs/05-roadmap.md). La EFT tendrá planificación separada.
 
 Documentos: [Resumen del proyecto](docs/00-resumen-proyecto.md) · [Alcance](docs/01-alcance-ep3.md) · [Arquitectura](docs/02-arquitectura-dashboard.md) · [Métricas](docs/03-metricas-y-pruebas.md) · [Seguridad](docs/04-seguridad-y-uso-ia.md) · [Roadmap](docs/05-roadmap.md) · [Prompts Codex](prompts/README.md).
 
