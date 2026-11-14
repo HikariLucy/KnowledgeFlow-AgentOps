@@ -2,6 +2,7 @@
 
 import numpy as np
 
+from app.observability.telemetry import instrument
 from app.memory.long_term import LongTermMemoryStore
 from app.memory.models import (
     MemoryCreate,
@@ -22,6 +23,7 @@ class SemanticMemory:
         self.store = store
         self.embeddings = embeddings
 
+    @instrument('memory', 'remember')
     def remember(self, data: MemoryCreate) -> MemoryRecord:
         """Embed and persist one long-term memory."""
         vector = self.embeddings.embed_document(
@@ -36,6 +38,7 @@ class SemanticMemory:
             embedding=vector,
         )
 
+    @instrument('memory', 'search')
     def search(
         self,
         query: str,

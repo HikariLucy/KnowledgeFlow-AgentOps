@@ -1,5 +1,6 @@
 """Application service exposing the deterministic agentic workflow."""
 
+from app.observability.telemetry import instrument
 from app.agentic.orchestrator import AdaptiveOrchestrator
 from app.agentic.state import AgentState
 from app.api.agent_schemas import AgentRequest, AgentResponse
@@ -11,6 +12,7 @@ class AgentService:
     def __init__(self, orchestrator: AdaptiveOrchestrator) -> None:
         self.orchestrator = orchestrator
 
+    @instrument('agent', 'execute', session=True)
     def execute(self, request: AgentRequest) -> AgentResponse:
         """Run one turn and return a traceable response without private reasoning."""
         state = AgentState(

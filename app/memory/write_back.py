@@ -1,5 +1,6 @@
 """Controlled memory write-back for completed agentic executions."""
 
+from app.observability.telemetry import instrument
 from app.agentic.state import AgentState
 from app.memory.models import (
     MemoryCreate,
@@ -28,6 +29,7 @@ class MemoryWriteBack:
         self.short_term_memory = short_term_memory
         self.semantic_memory = semantic_memory
 
+    @instrument('memory', 'write_back')
     def record(
         self,
         state: AgentState,

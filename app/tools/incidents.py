@@ -1,5 +1,6 @@
 """Operational incident tools for KnowledgeFlow Agent."""
 
+from app.observability.telemetry import instrument
 from app.storage.models import (
     Incident,
     IncidentCreate,
@@ -27,6 +28,7 @@ class CreateIncidentTool:
     def __init__(self, repository: IncidentRepository) -> None:
         self.repository = repository
 
+    @instrument('tool', 'create_incident')
     def run(self, arguments: CreateIncidentInput) -> Incident:
         """Validate and persist a new incident."""
         return self.repository.create_incident(
@@ -52,6 +54,7 @@ class SearchIncidentsTool:
     def __init__(self, repository: IncidentRepository) -> None:
         self.repository = repository
 
+    @instrument('tool', 'search_incidents')
     def run(self, arguments: SearchIncidentsInput) -> list[Incident]:
         """Return incidents matching the validated filters."""
         return self.repository.search_incidents(
@@ -74,6 +77,7 @@ class AppendIncidentNoteTool:
     def __init__(self, repository: IncidentRepository) -> None:
         self.repository = repository
 
+    @instrument('tool', 'append_incident_note')
     def run(self, arguments: AppendIncidentNoteInput) -> IncidentNote:
         """Persist a follow-up note for an existing incident."""
         return self.repository.append_note(

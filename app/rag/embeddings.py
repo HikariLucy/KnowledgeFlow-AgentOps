@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Optional, Sequence, Union
 from langchain_core.documents import Document
 import numpy as np
 
+from app.observability.telemetry import provider_call
 from app.core.config import Settings, get_settings
 from app.llm.client import GeminiClient, get_gemini_client
 
@@ -128,7 +129,8 @@ class GeminiEmbeddings(BaseEmbeddings):
         client = self.gemini_client.get_client()
 
         try:
-            response = client.models.embed_content(
+            response = provider_call(
+                'embed', client.models.embed_content,
                 model=self.embedding_model,
                 contents=formatted_text,
                 config={"output_dimensionality": self.embedding_dimension},

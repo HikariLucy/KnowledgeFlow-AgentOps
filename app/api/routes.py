@@ -1,9 +1,9 @@
 """FastAPI API routes for KnowledgeFlow RAG query endpoint."""
 
-import logging
 from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 
+from app.observability.telemetry import safe_log
 from app.core.config import Settings, get_settings
 from app.rag.embeddings import GeminiEmbeddings
 from app.rag.generator import GeminiRAGGenerator
@@ -13,7 +13,6 @@ from app.rag.schemas import QueryRequest, QueryResponse
 from app.rag.vectorstore import VectorStore, verify_index_freshness
 from app.agents.source_router import GeminiSourceRouter
 
-logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api", tags=["RAG"])
 
@@ -38,7 +37,7 @@ def get_rag_pipeline(
     try:
         vectorstore = VectorStore.load_local(vdir)
     except Exception as e:
-        logger.error("Failed to load vectorstore from '%s': %s", vdir, e)
+        safe_log('index_unavailable', error=e)
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Vector store is not available or is stale. Run: python -m app.rag.indexer",
@@ -50,7 +49,7 @@ def get_rag_pipeline(
         knowledge_dir="knowledge",
         settings=settings,
     ):
-        logger.warning("Vectorstore manifest in '%s' is stale.", vdir)
+        safe_log('index_stale')
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
             detail="Vector store is not available or is stale. Run: python -m app.rag.indexer",
@@ -100,7 +99,7 @@ async def query_rag(
     except HTTPException:
         raise
     except Exception as e:
-        logger.error("Error executing RAG pipeline: %s", e)
+        safe_log('pipeline_error', error=e)
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="An error occurred while processing your query.",

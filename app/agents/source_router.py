@@ -2,14 +2,13 @@
 
 from abc import ABC, abstractmethod
 import json
-import logging
 from typing import Callable, Optional
 
+from app.observability.telemetry import instrument, provider_call, safe_log
 from app.core.config import Settings, get_settings
 from app.llm.client import GeminiClient, get_gemini_client
 from app.rag.schemas import RouteDecision, SourceScope
 
-logger = logging.getLogger(__name__)
 
 ROUTER_SYSTEM_INSTRUCTION = (
     "Eres un clasificador de consultas para un motor RAG corporativo.\n"
@@ -52,13 +51,14 @@ class GeminiSourceRouter(BaseSourceRouter):
 
     def _fallback_decision(self, reason: str) -> RouteDecision:
         """Safe fallback to 'all' source scope."""
-        logger.warning("Routing fallback triggered: %s", reason)
+        safe_log('routing_fallback')
         return RouteDecision(
             source_scope="all",
             confidence=0.50,
             routing_reason=f"Fallback to 'all': {reason}",
         )
 
+    @instrument('rag', 'route')
     def route(self, query: str) -> RouteDecision:
         """Route user query to appropriate source scope using Gemini."""
         if not query or not str(query).strip():
@@ -82,7 +82,8 @@ class GeminiSourceRouter(BaseSourceRouter):
             response = None
             for attempt in range(4):
                 try:
-                    response = client.models.generate_content(
+                    response = provider_call(
+                        'route', client.models.generate_content,
                         model=self.settings.gemini_router_model,
                         contents=prompt,
                         config=config,
@@ -94,12 +95,7 @@ class GeminiSourceRouter(BaseSourceRouter):
                         sleep_time = 3.0 * (attempt + 1)
                         if "429" in str(ex) or "RESOURCE_EXHAUSTED" in str(ex):
                             sleep_time = 8.0 * (attempt + 1)
-                        logger.warning(
-                            "GeminiSourceRouter attempt %d failed (%s). Retrying in %.1fs...",
-                            attempt + 1,
-                            ex,
-                            sleep_time,
-                        )
+                        safe_log('provider_retry', error=ex)
                         time.sleep(sleep_time)
                         continue
                     raise ex
