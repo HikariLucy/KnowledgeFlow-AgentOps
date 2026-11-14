@@ -11,13 +11,13 @@ Continuación de la solución organizacional **NovaTech SpA**:
 
 Agregar **observabilidad, trazabilidad y evaluación reproducible** a la base de agentes funcionales sin rehacer el RAG ni el orquestador. Las métricas deben permitir identificar errores, medir calidad, latencia y uso de recursos, y documentar mejoras fundamentadas en evidencia.
 
-**Dashboard:** interfaz propia con **FastAPI + HTML/CSS/JavaScript**, integrada con la UI actual del agente; **sin Streamlit**. El equipo reportó su implementación y mostró su funcionamiento visual **en la rama local `feat/observability`**, todavía no integrada en `main`; la revisión visual integral y el cierre de M4 siguen pendientes. No se presentan métricas simuladas como resultados reales. **[Cómo iniciar y demostrar el dashboard](docs/08-guia-demostracion-dashboard.md).**
+**Dashboard:** interfaz propia con **FastAPI + HTML/CSS/JavaScript**, integrada con la UI actual del agente; **sin Streamlit**. El equipo reportó la implementación y **validación E2E del dashboard con Chromium/Playwright** en la rama local `feat/observability`, todavía no integrada en `main`. Las pruebas de interacción con datos poblados usaron un almacén `mock` temporal eliminado al finalizar. M4 se considera cerrado según ese informe, pendiente de publicación/verificación independiente. No se presentan métricas simuladas como resultados reales. **[Cómo iniciar y demostrar el dashboard](docs/08-guia-demostracion-dashboard.md).**
 
 ## Estado de migración
 
 **Completada:** 141 archivos de EP2 importados y verificados por SHA, incluidos código, tests, UI, documentación y datasets. El README histórico se conserva en [docs/legacy/README_EP2.md](docs/legacy/README_EP2.md). Consultar [acta técnica de migración](docs/legacy/MIGRACION-EP2.md).
 
-**Estado EP3 al 13-11-2026:** avance **estimado de hitos cerrados: 50 %** (M0–M3). M0 está verificado en GitHub; M1–M3 fueron reportados completos localmente. **M4: dashboard implementado localmente, con 341 pruebas Python y 6 JavaScript informadas, y capturas de navegación manual; pendiente revisión visual integral e integración de la rama.** El próximo cierre de M4 elevaría la estimación a 70 %. M5 benchmark, M6 seguridad integral y M7 entrega siguen pendientes. El código de M1–M4 **aún no está publicado en `main`**. Ver [roadmap ponderado](docs/05-roadmap.md).
+**Estado EP3 al 14-11-2026:** avance **estimado de hitos cerrados: 70 %** (M0–M4). M0 está verificado en GitHub; M1–M4 fueron reportados como completados localmente. **M4: dashboard probado en Chromium/Playwright (desktop/tablet/móvil), 341 tests Python offline y 6 JS reportados, sin llamadas a red.** La validación con datos poblados fue sintética `mock`; precisión y consistencia siguen N/D hasta M5. **El código funcional de M1–M4 aún no está publicado en `main`**. M5 benchmark, M6 seguridad y M7 entrega pendientes. Ver [roadmap ponderado](docs/05-roadmap.md).
 
 ## Base migrada desde EP2
 
@@ -37,7 +37,7 @@ Windows: activar `.venv\Scripts\Activate.ps1`. Las dependencias y pruebas se ver
 
 ## Plan de trabajo
 
-**Progreso estimado EP3: 50 %** (elaboración ponderada; no es nota académica ni avance EFT).
+**Progreso estimado EP3: 70 %** (elaboración ponderada; no es nota académica ni avance EFT).
 
 | Hito | Peso | Estado |
 |---|---:|---|
@@ -45,7 +45,7 @@ Windows: activar `.venv\Scripts\Activate.ps1`. Las dependencias y pruebas se ver
 | M1 Auditoría y regresión offline | 10 % | Reportado completado localmente |
 | M2 Instrumentación JSON y trazabilidad | 15 % | Reportado completado localmente |
 | M3 SQLite, agregados y API de observabilidad | 15 % | Reportado completado localmente |
-| M4 Dashboard web propio | 20 % | Implementado localmente; validación integral y publicación pendientes |
+| M4 Dashboard web propio | 20 % | Completado según auditoría visual local (Playwright); publicación pendiente |
 | M5 Benchmark de precisión y consistencia | 15 % | Pendiente |
 | M6 Seguridad y validación integral | 10 % | Pendiente |
 | M7 Evidencias, informe y presentación EP3 | 5 % | Pendiente |
